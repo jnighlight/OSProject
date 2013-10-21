@@ -1,2 +1,2 @@
-fcfs.exe : ./FCFS/FCFSProcess.cpp
-	g++ -o fcfs.exe FCFSProcess.cpp -I ./include
+fcfs.exe : ./FCFS/FCFSProcessor.cpp
+	g++ -o fcfs.exe ./FCFS/FCFSProcessor.cpp -I ./include
