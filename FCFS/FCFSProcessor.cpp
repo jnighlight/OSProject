@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <Process.h>
+#include "Process.h"
 
 using namespace std;
 
@@ -11,13 +11,13 @@ int main()
 	int deadlines[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	int priorities[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-	Process *pproc = new Process[10];
-	//Process procs[10];
+	//Process *pproc = new Process[10];
+	Process procs[10];
 	for(int i = 0; i < 10; i++)
 	{
-		pproc[i].runtime = runtimes[i];
-		pproc[i].deadline = deadlines[i];
-		pproc[i].priority = priorities[i];
+		procs[i].runtime = runtimes[i];
+		procs[i].deadline = deadlines[i];
+		procs[i].priority = priorities[i];
 	}
 	
 	return 0;
