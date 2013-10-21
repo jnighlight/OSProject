@@ -7,7 +7,7 @@ int main()
 {
 	ifstream myFile;
 	string line;
-	myFile.open("FCFSProcesses.txt");
+	myFile.open("../Processes.txt");
 	if(myFile.is_open())
 	{
 		while ( getline (myFile,line) )
