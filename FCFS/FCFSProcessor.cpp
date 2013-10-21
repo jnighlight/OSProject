@@ -16,9 +16,9 @@ int main()
 	//Process procs[10];
 	for(int i = 0; i < 10; i++)
 	{
-		//procs[i].runtime = runtimes[i];
-		//procs[i].deadlines = deadlines[i];
-		//procs[i].priorities = priorities[i];
+		procs[i]->runtime = runtimes[i];
+		procs[i]->deadlines = deadlines[i];
+		procs[i]->priorities = priorities[i];
 	}
 	
 	return 0;
