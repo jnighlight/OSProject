@@ -29,33 +29,33 @@ int main()
 	
 	//sort(procs.begin(), procs.end(), &processSortByArriveTime;
 	
-	/*while(procs[0] != NULL)
+	while(procs[0].runtime != -1)
 	{
-		if(procs[i].runtime > 0)
+		if(procs[0].runtime > 0)
 		{
-			procs[i].runtime--;
+			procs[0].runtime--;
 		}
 		else
 		{
-			procs[i].waitTime = clockerSpaniel - procs[i].arriveTime - procs[i].runtime;
-			procs[i].processingTime = clockerSpaniel - procs[i].arriveTime;
+			procs[0].waitTime = clockerSpaniel - procs[0].arriveTime - procs[0].runtime;
+			procs[0].processingTime = clockerSpaniel - procs[0].arriveTime;
 			
 			processesLeft--;
 			for(int j = 0; j < processesLeft; j++)
 			{
 				procs[j] = procs[j+1];
 			}
-			procs[processesLeft] = NULL;
+			procs[processesLeft].runtime = -1;
 		}
 		clockerSpaniel++;
-	}*/
+	}
 	
 	return 0;
 }
 
-/*
+
 bool processSortByArriveTime(Process *procA, Process *procB)
 {
-	return procA.arriveTime <= procB.arriveTime;
+	return procA -> arriveTime <= procB -> arriveTime;
 }
-*/
+
