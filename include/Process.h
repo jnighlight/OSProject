@@ -7,6 +7,8 @@ struct Process
 	int deadline;
 	int priority;
 	int arriveTime;
+	int waitTime;
+	int processingTime;
 };
 
 #endif
