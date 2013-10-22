@@ -10,4 +10,4 @@ fcfs : $(ODIR)FCFSProcessor.o
 	$(CC) -o $(BDIR)fcfs $(ODIR)FCFSProcessor.o $(CFLAGS) 
 	
 $(ODIR)FCFSProcessor.o : $(SDIR)FCFS/FCFSProcessor.cpp ./include/Process.h 
-	$(CC) -c -o $(ODIR)FCFSProcessor.o $(SDIR)FCFS/FCFSProcessor.cpp $(CFLAGS)
+	(CC) -c -o $(ODIR)FCFSProcessor.o $(SDIR)FCFS/FCFSProcessor.cpp $(CFLAGS)
