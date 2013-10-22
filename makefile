@@ -11,3 +11,9 @@ fcfs : $(ODIR)FCFSProcessor.o
 	
 $(ODIR)FCFSProcessor.o : $(SDIR)FCFS/FCFSProcessor.cpp ./include/Process.h 
 	$(CC) -c -o $(ODIR)FCFSProcessor.o $(SDIR)FCFS/FCFSProcessor.cpp $(CFLAGS)
+	
+edf : $(ODIR)EDF.o
+	$(CC) -o $(BDIR)edf $(ODIR)EDF.o $(CFLAGS) 
+	
+$(ODIR)EDF.o : $(SDIR)EarliestDeadFirst/EDF.cpp ./include/Process.h 
+	$(CC) -c -o $(ODIR)EDF.o $(SDIR)EarliestDeadFirst/EDF.cpp $(CFLAGS)
