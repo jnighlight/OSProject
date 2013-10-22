@@ -1,9 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <algorithm>
 #include "Process.h"
 
 using namespace std;
+
+bool processSortByArriveTime(Process procA, Process procB)
+{
+	return procA.arriveTime <= procB.arriveTime;
+}
 
 int main()
 {
@@ -27,13 +33,14 @@ int main()
 		procs[i].arriveTime = arrivalTimes[i];
 	}
 	
-	//sort(procs.begin(), procs.end(), &processSortByArriveTime;
+	std::sort(procs, procs + processesLeft, &processSortByArriveTime);
 	
 	while(procs[0].runtime != -1)
 	{
 		if(procs[0].runtime > 0)
 		{
 			procs[0].runtime--;
+			cout << "The priority is: " << procs[0].priority << endl;
 		}
 		else
 		{
@@ -52,10 +59,3 @@ int main()
 	
 	return 0;
 }
-
-
-bool processSortByArriveTime(Process *procA, Process *procB)
-{
-	return procA -> arriveTime <= procB -> arriveTime;
-}
-
