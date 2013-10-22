@@ -17,3 +17,9 @@ round_robin : $(ODIR)round_robin.o
 	
 $(ODIR)round_robin.o : $(SDIR)Round\ Robin/main.cpp ./include/Process.h 
 	$(CC) -c -o $(ODIR)round_robin.o $(SDIR)Round\ Robin/main.cpp $(CFLAGS)
+	
+edf : $(ODIR)EDF.o
+	$(CC) -o $(BDIR)edf $(ODIR)EDF.o $(CFLAGS) 
+	
+$(ODIR)EDF.o : $(SDIR)EarliestDeadFirst/EDF.cpp ./include/Process.h 
+	$(CC) -c -o $(ODIR)EDF.o $(SDIR)EarliestDeadFirst/EDF.cpp $(CFLAGS)
