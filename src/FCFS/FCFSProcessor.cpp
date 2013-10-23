@@ -2,10 +2,11 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 #include <Process.h>
 #include <process_generator.h>
 
-#define PROCESSES 50
+#define PROCESSES 100
 
 using namespace std;
 
@@ -14,8 +15,16 @@ bool processSortByArriveTime(Process procA, Process procB)
 	return procA.arrive_time <= procB.arrive_time;
 }
 
+bool processSortByID(Process procA, Process procB)
+{
+	return procA.id <= procB.id;
+}
+
 int main()
 {
+	ofstream output;
+	output.open("FCFS.txt");
+
 	/*int processing_times[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
 	int arrivalTimes[10] = { 2, 1, 3, 4, 5, 6, 70, 8, 9, 10};*/
 	ProcessGenerator::setMaxArrivalTime(100);
@@ -74,6 +83,8 @@ int main()
 	
 	cout << endl;
 	
+	std::sort(procs, procs + PROCESSES, &processSortByID);
+	
 	for(int i = 0; i < PROCESSES; i++)
 	{
 		
@@ -81,6 +92,18 @@ int main()
 		cout << procs[i].wait_time  << endl;
 		cout << procs[i].time_completed  << endl;
 	}
+	
+	// Output results
+	output << "process\twait_time\ttime_completed" << endl;
+	for(int i = 0; i < PROCESSES; i++)
+	{
+		output << procs[i].id << "\t"
+			   << procs[i].wait_time << "\t"
+			   << procs[i].time_completed << endl;
+	}
+
+	output.close();
+	delete(procs);
 	
 	return 0;
 }
