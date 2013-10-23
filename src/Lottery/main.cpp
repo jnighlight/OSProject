@@ -76,10 +76,13 @@ int main(int argc, const char* argv[])
 			clock++;
 			process[cur_p].runtime++;
 
-			for(int i = 0; i < processes; i++)
+			/*for(int i = 0; i < processes; i++)
 			{
-				if(i !=)
-			}
+				if(i != cur_p)
+				{
+					process[i].wait_time++;
+				}
+			}*/
 		}
 
 		// Process completed
