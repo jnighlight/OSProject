@@ -20,16 +20,14 @@ int main(int argc, const char* argv[])
 	// Setup random number generator
 	srand(time(NULL));
 
-	// Initialize process values
-	int processes            = 10;
-	/*int processing_times[10] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-	int arrival_times[10]    = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};*/
-	//Process process[processes]; // array of processes
+	//  Set the total amount of processess
+	int processes = 10;
 
 	// Set the number of tickets available
 	int tickets = 50;
 	vector<int> ticket(tickets); // number of tickets for process i
 
+	// Create the processes
 	Process* process = ProcessGenerator::generateProcesses(processes);
 	for(int i = 0; i < processes; i++)
 	{
@@ -38,7 +36,7 @@ int main(int argc, const char* argv[])
 		cout << "	processing_time = " << process[i].processing_time << endl;
 
 		// Assign at least one ticket per process
-		ticket.at(i)               = i;
+		ticket.at(i) = i;
 	}
 	cout << endl; // Break setup output with results output
 
