@@ -46,6 +46,8 @@ int main(int argc, const char* argv[])
 		// If the process has arrived, run it
 		if(process[cur_p].arrive_time <= clock)
 		{
+			process_checked = 0; // reset the process check
+
 			while(processing_time < TIME_QUANTUM &&
 					process[cur_p].runtime < process[cur_p].processing_time)
 			{
@@ -98,7 +100,7 @@ int main(int argc, const char* argv[])
 
 			// If there are no arrived processes that need to be run, increment the clock
 			process_checked++;
-			if(process_checked >= t_proc)
+			if(process_checked >= processes)
 			{
 				process_checked = 0;
 				clock++;
