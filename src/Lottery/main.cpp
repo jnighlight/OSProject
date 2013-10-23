@@ -33,7 +33,7 @@ int main(int argc, const char* argv[])
 	vector<int> ticket(tickets); // number of tickets for process i
 
 	// Create the processes
-	ProcessGenerator::setMaxArrivalTime(0); // all processes arrive at the same time
+	ProcessGenerator::setMaxArrivalTime(100); // all processes arrive at the same time
 	Process* process = ProcessGenerator::generateProcesses(processes);
 
 	// Assign at least one ticket per process
@@ -64,39 +64,72 @@ int main(int argc, const char* argv[])
 	int clock = 0;
 	int cur_p = 0;
 	int cur_t;
+	bool available_p;
 
 	while(processes > 0)
 	{
-		// Select a random ticket until an uncompleted process is selected
+		// Check if there are any available processes
+		int p_check = 0;
+		available_p = false;
 		do
 		{
-			cur_t = rand() % ticket.size();
-			cur_p = ticket[cur_t];
-
-			ticket.erase(ticket.begin() + cur_t); // remove the selected ticket from the list
+			if(process[p_check].arrive_time <= clock)
+			{
+				available_p = true;
+			}
+			p_check++;
 		}
-		while(process[cur_p].completed);
+		while(!available_p && p_check <= processes);
 
-		// Run the process until it finishes
-		while(process[cur_p].runtime < process[cur_p].processing_time)
+		// If there are no available processes, increment the clock
+		if(!available_p)
 		{
 			clock++;
-			process[cur_p].runtime++;
-
-			// Increment the wait times for the remaining processes
-			for(int i = 0; i < t_proc; i++)
-			{
-				if(i != cur_p && !process[i].completed)
-				{
-					process[i].wait_time++;
-				}
-			}
 		}
+		// Else, begin selecting tickets
+		else
+		{
+			// Select a random ticket until an uncompleted process is selected
+			do
+			{
+				cur_t = rand() % ticket.size();
+				cur_p = ticket[cur_t];
 
-		// Process completed
-		process[cur_p].completed = true;
-		process[cur_p].time_completed = clock;
-		processes--;
+				//ticket.erase(ticket.begin() + cur_t); // remove the selected ticket from the list
+			}
+			while(process[cur_p].completed ||
+					process[cur_p].arrive_time > clock);
+
+				// Run the process until it finishes
+				while(process[cur_p].runtime < process[cur_p].processing_time)
+				{
+					clock++;
+					process[cur_p].runtime++;
+
+					// Increment the wait times for the remaining processes
+					for(int i = 0; i < t_proc; i++)
+					{
+						if(i != cur_p && !process[i].completed)
+						{
+							process[i].wait_time++;
+						}
+					}
+				}
+
+				// Process completed
+				process[cur_p].completed = true;
+				process[cur_p].time_completed = clock;
+				processes--;
+
+				// Clear all tickets for the serviced process
+				for(int i = 0; i < ticket.size(); i++)
+				{
+					if(ticket.at(i) == process[cur_p].id)
+					{
+						ticket.erase(ticket.begin() + i);
+					}
+				}
+		  }
 
 		// DEBUG
 		/*cout << "clock: " << clock;
@@ -106,15 +139,17 @@ int main(int argc, const char* argv[])
 	//cout << endl; // Break runtime output with results output
 
 	// Output results
-	output << "process\twait_time\ttime_completed" << endl;
+	output << "process\tarrival_time\twait_time\ttime_completed" << endl;
 	for(int i = 0; i < t_proc; i++)
 	{
 		cout << left;
 		cout << "process[" << i << "]: ";
+		cout << "arrival_time = " << setw(8) << process[i].arrive_time;
 		cout << "wait_time = " << setw(8) << process[i].wait_time;
 		cout << "time_completed = " << process[i].time_completed << endl;
 
 		output << i << "\t"
+			   << process[i].arrive_time << "\t"
 			   << process[i].wait_time << "\t"
 			   << process[i].time_completed << endl;
 	}
