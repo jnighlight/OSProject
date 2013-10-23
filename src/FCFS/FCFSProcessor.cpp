@@ -13,8 +13,8 @@ bool processSortByArriveTime(Process procA, Process procB)
 
 int main()
 {
-	int runtimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int arrivalTimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
+	int processing_times[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
+	int arrivalTimes[10] = { 2, 1, 3, 4, 5, 6, 70, 8, 9, 10};
 	int processesLeft = 10;
 	
 	int clockerSpaniel = 0;
@@ -25,31 +25,34 @@ int main()
 	Process procs[10];
 	for(int i = 0; i < 10; i++)
 	{
-		procs[i].runtime = runtimes[i];
+		procs[i].id = i+1;
+		procs[i].processing_time = processing_times[i];
 		procs[i].arrive_time = arrivalTimes[i];
+		procs[i].runtime = 0;
 	}
 	
 	std::sort(procs, procs + processesLeft, &processSortByArriveTime);
 	
 	int doneRun = 0;
-	while(procs[0].runtime != -1)
+	while(procs[0].processing_time != -1)
 	{
 		clockerSpaniel++;
-		if(procs[0].runtime - doneRun > 0)
+		if(procs[0].processing_time - procs[0].runtime > 0)
 		{
-			doneRun++;
+			if(procs[0].arrive_time <= clockerSpaniel)
+				{procs[0].runtime++;}
 			//cout << "The arrival time is: " << procs[0].arrive_time << endl;
 		}
 		else
 		{
-			cout << "Switching Processes " << endl;
+			cout << "Switching Processes from proc # " << procs[0].id <<endl;
 			cout << "clock: " << clockerSpaniel << endl;
 			cout << "arrive_time: " << procs[0].arrive_time << endl;
-			cout << "runtime: " << procs[0].runtime << endl << endl;
-			procs[0].wait_time = (clockerSpaniel - procs[0].arrive_time) - procs[0].runtime;
-			procs[0].processing_time = clockerSpaniel - procs[0].arrive_time;
-			procs[0].runtime = -1;
-			doneRun = 0;
+			cout << "processing_time: " << procs[0].processing_time << endl << endl;
+			procs[0].wait_time = (clockerSpaniel - procs[0].arrive_time) - procs[0].processing_time;
+			procs[0].time_completed = clockerSpaniel - procs[0].arrive_time;
+			procs[0].processing_time = -1;
+			//doneRun = 0;
 			
 			processesLeft--;
 			Process holder = procs[0];
@@ -67,9 +70,9 @@ int main()
 	for(int i = 0; i < 10; i++)
 	{
 		
-		cout << endl << "Process Number: " << i+1 << endl;
+		cout << endl << "Process Number: " << procs[i].id << endl;
 		cout << procs[i].wait_time  << endl;
-		cout << procs[i].processing_time  << endl;
+		cout << procs[i].time_completed  << endl;
 	}
 	
 	return 0;
