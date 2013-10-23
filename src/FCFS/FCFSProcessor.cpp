@@ -2,7 +2,10 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include "Process.h"
+#include <Process.h>
+#include <process_generator.h>
+
+#define PROCESSES 50
 
 using namespace std;
 
@@ -13,27 +16,31 @@ bool processSortByArriveTime(Process procA, Process procB)
 
 int main()
 {
-	int processing_times[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int arrivalTimes[10] = { 2, 1, 3, 4, 5, 6, 70, 8, 9, 10};
-	int processesLeft = 10;
+	/*int processing_times[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
+	int arrivalTimes[10] = { 2, 1, 3, 4, 5, 6, 70, 8, 9, 10};*/
+	ProcessGenerator::setMaxArrivalTime(100);
+	ProcessGenerator::setMaxProcessingTime(10);
+	Process* procs = ProcessGenerator::generateProcesses(PROCESSES);
+	
+	int processesLeft = PROCESSES;
 	
 	int clockerSpaniel = 0;
 	
 	
 
 	//Process *pproc = new Process[10];
-	Process procs[10];
-	for(int i = 0; i < 10; i++)
+	/*Process procs[PROCESSES];
+	for(int i = 0; i < PROCESSES; i++)
 	{
 		procs[i].id = i+1;
 		procs[i].processing_time = processing_times[i];
 		procs[i].arrive_time = arrivalTimes[i];
 		procs[i].runtime = 0;
-	}
+	}*/
 	
 	std::sort(procs, procs + processesLeft, &processSortByArriveTime);
 	
-	int doneRun = 0;
+	//int doneRun = 0;
 	while(procs[0].processing_time != -1)
 	{
 		clockerSpaniel++;
@@ -56,18 +63,18 @@ int main()
 			
 			processesLeft--;
 			Process holder = procs[0];
-			for(int j = 0; j < 10; j++)
+			for(int j = 0; j < PROCESSES; j++)
 			{
 				procs[j] = procs[j+1];
 			}
-			procs[9] = holder;
+			procs[PROCESSES - 1] = holder;
 		}
 		//clockerSpaniel++;
 	}
 	
 	cout << endl;
 	
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < PROCESSES; i++)
 	{
 		
 		cout << endl << "Process Number: " << procs[i].id << endl;
