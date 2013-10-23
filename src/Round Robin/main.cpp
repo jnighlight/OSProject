@@ -24,7 +24,7 @@ int main(int argc, const char* argv[])
 	int processes = t_proc;
 
 	// Create the processes
-	ProcessGenerator::setMaxArrivalTime(100); // all processes arrive at the same time
+	ProcessGenerator::setMaxArrivalTime(100);
 	Process* process = ProcessGenerator::generateProcesses(processes);
 
 	// DEBUG

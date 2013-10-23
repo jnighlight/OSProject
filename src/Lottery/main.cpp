@@ -25,7 +25,7 @@ int main(int argc, const char* argv[])
 	srand(time(NULL));
 
 	// Set the total amount of processes
-	int t_proc    = 100;
+	int t_proc    = 1000;
 	int processes = t_proc;
 
 	// Set the number of tickets available
@@ -33,7 +33,7 @@ int main(int argc, const char* argv[])
 	vector<int> ticket(tickets); // number of tickets for process i
 
 	// Create the processes
-	ProcessGenerator::setMaxArrivalTime(100); // all processes arrive at the same time
+	ProcessGenerator::setMaxArrivalTime(100);
 	Process* process = ProcessGenerator::generateProcesses(processes);
 
 	// Assign at least one ticket per process
