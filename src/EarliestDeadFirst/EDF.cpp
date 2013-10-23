@@ -2,7 +2,10 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
-#include "Process.h"
+#include <Process.h>
+#include <process_generator.h>
+
+#define PROCESSES 50
 
 using namespace std;
 
@@ -29,20 +32,23 @@ bool processSortByDeadline(Process procA, Process procB)
 
 int main()
 {
-	int processingTimes[10] = { 2, 1, 3, 4, 5, 20, 7, 8, 9, 10};
+	/*int processingTimes[10] = { 2, 1, 3, 4, 5, 20, 7, 8, 9, 10};
 	int ids[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	//int processingTimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
 	int arrivalTimes[10] = { 1, 1, 1, 1, 1, 70, 1, 1, 1, 1}; //{ 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
 	int deadlines[10] = { 2, 1, 3, 4, 5, 500, 7, 8, 9, 10};
-	int priorities[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int processesStart = 10;
+	int priorities[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};*/
+	ProcessGenerator::setMaxArrivalTime(100);
+	ProcessGenerator::setMaxProcessingTime(10);
+	Process* procs = ProcessGenerator::generateProcesses(PROCESSES);
+	int processesStart = PROCESSES;
 	int processesLeft = processesStart;
 	//int processesToGo = 10;
 	
 	bool running = true;
 
 	//Process *pproc = new Process[10];
-	Process procs[10];
+	/*Process procs[10];
 	for(int i = 0; i < 10; i++)
 	{
 		procs[i].id = ids[i];
@@ -52,16 +58,15 @@ int main()
 		procs[i].arrive_time = arrivalTimes[i];
 		procs[i].deadline = deadlines[i];
 		procs[i].priority = priorities[i];
-	}
+	}*/
 	
 	std::sort(procs, procs + processesStart, &processSortByDeadline);
-	cout << "Array sorted:" << endl;
-	for(int j = 0; j < 10; j++)
+	//cout << "Array sorted:" << endl;
+	/*for(int j = 0; j < PROCESSES; j++)
 	{
 		cout << "process #" << procs[j].id << endl;
-	}
+	}*/
 	
-											//Not necessary anymore - int doneRun = 0;
 	while(processesLeft > 0)  //processesToGo + processesLeft > 0)
 	{		
 		//Increment clock
@@ -69,18 +74,18 @@ int main()
 		
 		//sort it so the process with the earliest deadline is first in the "queue"
 		std::sort(procs, procs + processesStart, &processSortByDeadline);
-		cout << "Array sorted:" << endl;
-		/*for(int j = 0; j < 10; j++)
+		//cout << "Array sorted:" << endl;
+		/*for(int j = 0; j < PROCESSES; j++)
 		{
 			cout << "process #" << procs[j].id << endl;
 		}*/
 		int nextOK = -1;
-		for(int k = 0; k < 10; k++)
+		for(int k = 0; k < PROCESSES; k++)
 		{
 			if(!procs[k].completed && procs[k].arrive_time <= clockerSpaniel)
 			{
 				nextOK = k;
-				k = 10;
+				k = PROCESSES;
 			}
 		}
 		if(nextOK != -1)
@@ -114,7 +119,7 @@ int main()
 	cout << endl;
 	
 	std::sort(procs, procs + processesStart, &processSortByID);
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < PROCESSES; i++)
 	{
 		
 		cout << endl << "Process Number: " << procs[i].id << endl;
