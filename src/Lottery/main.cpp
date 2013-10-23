@@ -1,11 +1,15 @@
+// Lottery Scheduling
+// Author: Jure Jumalon
+
 #include <algorithm>
-#include <array>
 #include <ctime>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
 #include <Process.h>
+#include <process_generator.h>
 
 #define PROCESSES 10
 
@@ -18,31 +22,30 @@ int main(int argc, const char* argv[])
 
 	// Initialize process values
 	int processes            = 10;
-	int processing_times[10] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-	int arrival_times[10]    = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
+	/*int processing_times[10] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
+	int arrival_times[10]    = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};*/
+	//Process process[processes]; // array of processes
 
 	// Set the number of tickets available
 	int tickets = 50;
-	array<int, tickets>
-	int ticket[50]; // number of tickets for process i
+	vector<int> ticket(tickets); // number of tickets for process i
 
-	Process process[processes]; // array of processes
+	Process* process = ProcessGenerator::generateProcesses(processes);
 	for(int i = 0; i < processes; i++)
 	{
-		process[i].id              = i;
-		process[i].processing_time = processing_times[i];
-		process[i].arrive_time     = arrival_times[i];
-		process[i].runtime         = 0;
-		process[i].completed       = false;
+		cout << "process[" << process[i].id << "]:";
+		cout << "	arrival = " << process[i].arrive_time;
+		cout << "	processing_time = " << process[i].processing_time << endl;
 
 		// Assign at least one ticket per process
-		ticket[i]                  = i;
+		ticket.at(i)               = i;
 	}
+	cout << endl; // Break setup output with results output
 
 	// Assign the remaining tickets randomly to processes
 	for(int i = processes; i < tickets; i++)
 	{
-		ticket[i] = rand() % processes;
+		ticket.at(i) = rand() % processes;
 	}
 
 	// Print the tickets and the process they are assigned to
@@ -61,8 +64,10 @@ int main(int argc, const char* argv[])
 		// Select a random ticket until an uncompleted process is selected
 		do
 		{
-			cur_t = rand() % processes;
+			cur_t = rand() % ticket.size();
 			cur_p = ticket[cur_t];
+
+			ticket.erase(ticket.begin() + cur_t); // remove the selected ticket from the list
 		}
 		while(process[cur_p].completed);
 
