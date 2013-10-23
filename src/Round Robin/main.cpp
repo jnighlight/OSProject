@@ -2,6 +2,7 @@
 // Author: Jure Jumalon
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -14,8 +15,12 @@ using namespace std;
 
 int main(int argc, const char* argv[])
 {
+	// Setup the output file
+	ofstream output;
+	output.open("round_robin_output.txt");
+
 	// Set the total amount of processes
-	int t_proc    = 10;
+	int t_proc    = 100;
 	int processes = t_proc;
 
 	// Create the processes
@@ -91,13 +96,19 @@ int main(int argc, const char* argv[])
 	}
 
 	// Output results
+	output << "process\twait_time\ttime_completed" << endl;
 	for(int i = 0; i < t_proc; i++)
 	{
 		cout << left;
 		cout << "process[" << i << "]: ";
 		cout << "wait_time = " << setw(8) << process[i].wait_time;
 		cout << "time_completed = " << process[i].time_completed << endl;
+
+		output << i << "\t"
+			   << process[i].wait_time << "\t"
+			   << process[i].time_completed << endl;
 	}
 
+	output.close();
 	delete(process);
 }
