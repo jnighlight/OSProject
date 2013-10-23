@@ -15,6 +15,7 @@ Process* ProcessGenerator::generateProcesses(int num)
 		process[i].id              = i;
 		process[i].arrive_time     = rand() % (max_arrival_time + 1);
 		process[i].processing_time = rand() % max_processing_time + 1;
+		process[i].deadline = (process[i].arrive_time + process[i].processing_time) * 5;
 		process[i].runtime         = 0;
 		process[i].wait_time       = 0;
 		process[i].completed       = false;
