@@ -12,39 +12,39 @@ int main(int argc, const char* argv[])
 {
 	// Initialize process values
 	int processes = 10;
-	int runtimes[10]      = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
+	int processing_times[10]      = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
 	int arrival_times[10] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
 
 	Process process[processes];
 	for(int i = 0; i < processes; i++)
 	{
 		process[i].id              = i;
-		process[i].runtime         = runtimes[i];
+		process[i].processing_time = processing_times[i];
 		process[i].arrive_time     = arrival_times[i];
-		process[i].processing_time = 0;
+		process[i].runtime         = 0;
 		process[i].completed       = false;
 	}
 
 	// Begin Round Robin
 	int clock = 0;
-	int runtime = 0;
+	int processing_time = 0;
 	int cproc = 0;
 
 	while(processes > 0)
 	{
-		while(runtime < TIME_QUANTUM &&
-				process[cproc].processing_time < process[cproc].runtime)
+		while(processing_time < TIME_QUANTUM &&
+				process[cproc].runtime < process[cproc].processing_time)
 		{
-			runtime++;
+			processing_time++;
 			clock++;
 
-			process[cproc].processing_time++;
+			process[cproc].runtime++;
 			/*cout << "process: " << cproc;
-			cout << "	processing time: " << process[cproc].processing_time;
-			cout << "	runtime: " << process[cproc].runtime << endl;*/
+			cout << "	processing time: " << process[cproc].runtime;
+			cout << "	processing_time: " << process[cproc].processing_time << endl;*/
 		}
 
-		if(process[cproc].processing_time == process[cproc].runtime)
+		if(process[cproc].runtime == process[cproc].processing_time)
 		{
 			process[cproc].completed = true;
 			processes--;
@@ -68,7 +68,7 @@ int main(int argc, const char* argv[])
 			cout << "clock: " << clock;
 			cout << "	process " << process[prevp].id << " switched to " << process[cproc].id << endl;
 
-			runtime = 0;
+			processing_time = 0;
 		}
 	}
 }
