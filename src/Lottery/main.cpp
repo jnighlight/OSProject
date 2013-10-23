@@ -6,12 +6,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <Process.h>
 #include <process_generator.h>
-
-#define PROCESSES 10
 
 using namespace std;
 
@@ -20,8 +19,9 @@ int main(int argc, const char* argv[])
 	// Setup random number generator
 	srand(time(NULL));
 
-	// Set the total amount of processess
-	int processes = 10;
+	// Set the total amount of processes
+	int t_proc    = 10;
+	int processes = t_proc;
 
 	// Set the number of tickets available
 	int tickets = 50;
@@ -30,16 +30,18 @@ int main(int argc, const char* argv[])
 	// Create the processes
 	ProcessGenerator::setMaxArrivalTime(0); // all processes arrive at the same time
 	Process* process = ProcessGenerator::generateProcesses(processes);
+
+	// Assign at least one ticket per process
 	for(int i = 0; i < processes; i++)
 	{
-		cout << "process[" << process[i].id << "]:";
+		// DEBUG
+		/*cout << "process[" << process[i].id << "]:";
 		cout << "	arrival_time = " << process[i].arrive_time;
-		cout << "	processing_time = " << process[i].processing_time << endl;
+		cout << "	processing_time = " << process[i].processing_time << endl;*/
 
-		// Assign at least one ticket per process
 		ticket.at(i) = i;
 	}
-	cout << endl; // Break setup output with results output
+	//cout << endl; // Break setup output with runtime output
 
 	// Assign the remaining tickets randomly to processes
 	for(int i = processes; i < tickets; i++)
@@ -76,13 +78,14 @@ int main(int argc, const char* argv[])
 			clock++;
 			process[cur_p].runtime++;
 
-			/*for(int i = 0; i < processes; i++)
+			// Increment the wait times for the remaining processes
+			for(int i = 0; i < t_proc; i++)
 			{
-				if(i != cur_p)
+				if(i != cur_p && !process[i].completed)
 				{
 					process[i].wait_time++;
 				}
-			}*/
+			}
 		}
 
 		// Process completed
@@ -90,8 +93,20 @@ int main(int argc, const char* argv[])
 		process[cur_p].time_completed = clock;
 		processes--;
 
-		cout << "clock: " << clock;
-		cout << "	process " << process[cur_p].id << " completed" << endl;
+		// DEBUG
+		/*cout << "clock: " << clock;
+		cout << "	process " << process[cur_p].id << " completed" << endl;*/
+	}
+
+	//cout << endl; // Break runtime output with results output
+
+	// Output results
+	for(int i = 0; i < t_proc; i++)
+	{
+		cout << left;
+		cout << "process[" << i << "]: ";
+		cout << "wait_time = " << setw(8) << process[i].wait_time;
+		cout << "time_completed = " << process[i].time_completed << endl;
 	}
 
 	delete(process);
