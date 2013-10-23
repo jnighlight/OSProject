@@ -42,6 +42,8 @@ int main()
 	int processesStart = PROCESSES;
 	int processesLeft = processesStart;
 	
+	int missedDead = 0;
+	
 	bool running = true;
 	
 	std::sort(procs, procs + processesStart, &processSortByDeadline);
@@ -84,7 +86,7 @@ int main()
 				procs[nextOK].time_completed = clockerSpaniel - procs[nextOK].arrive_time;
 				procs[nextOK].processing_time = -1;
 				
-				
+				missedDead += procs[nextOK].deadline < clockerSpaniel ? 1 : 0;
 				
 				processesLeft--;
 				procs[nextOK].completed = true;
@@ -112,6 +114,8 @@ int main()
 			   << procs[i].time_completed << endl;
 	}
 
+	output << "Missed deadlines : " << missedDead << endl;
+	
 	output.close();
 	delete(procs);
 	
