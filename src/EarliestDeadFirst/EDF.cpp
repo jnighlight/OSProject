@@ -35,54 +35,27 @@ int main()
 {
 	ofstream output;
 	output.open("EDF.txt");
-
-	/*int processingTimes[10] = { 2, 1, 3, 4, 5, 20, 7, 8, 9, 10};
-	int ids[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-	//int processingTimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int arrivalTimes[10] = { 1, 1, 1, 1, 1, 70, 1, 1, 1, 1}; //{ 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int deadlines[10] = { 2, 1, 3, 4, 5, 500, 7, 8, 9, 10};
-	int priorities[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};*/
+	
 	ProcessGenerator::setMaxArrivalTime(100);
-	ProcessGenerator::setMaxProcessingTime(10);
+	ProcessGenerator::setMaxProcessingTime(20);
 	Process* procs = ProcessGenerator::generateProcesses(PROCESSES);
 	int processesStart = PROCESSES;
 	int processesLeft = processesStart;
-	//int processesToGo = 10;
+	
+	int missedDead = 0;
 	
 	bool running = true;
-
-	//Process *pproc = new Process[10];
-	/*Process procs[10];
-	for(int i = 0; i < 10; i++)
-	{
-		procs[i].id = ids[i];
-		procs[i].processing_time = processingTimes[i];
-		procs[i].runtime = 0;
-		procs[i].completed = false;
-		procs[i].arrive_time = arrivalTimes[i];
-		procs[i].deadline = deadlines[i];
-		procs[i].priority = priorities[i];
-	}*/
 	
 	std::sort(procs, procs + processesStart, &processSortByDeadline);
-	//cout << "Array sorted:" << endl;
-	/*for(int j = 0; j < PROCESSES; j++)
-	{
-		cout << "process #" << procs[j].id << endl;
-	}*/
 	
-	while(processesLeft > 0)  //processesToGo + processesLeft > 0)
+	while(processesLeft > 0)
 	{		
 		//Increment clock
 		clockerSpaniel++;
 		
 		//sort it so the process with the earliest deadline is first in the "queue"
 		std::sort(procs, procs + processesStart, &processSortByDeadline);
-		//cout << "Array sorted:" << endl;
-		/*for(int j = 0; j < PROCESSES; j++)
-		{
-			cout << "process #" << procs[j].id << endl;
-		}*/
+		
 		int nextOK = -1;
 		for(int k = 0; k < PROCESSES; k++)
 		{
@@ -109,15 +82,16 @@ int main()
 				cout << "arrive_time: " << procs[nextOK].arrive_time << endl;
 				cout << "processing_time: " << procs[nextOK].processing_time << endl << endl;
 				procs[nextOK].wait_time = (clockerSpaniel - procs[nextOK].arrive_time) - procs[nextOK].processing_time;
+				procs[nextOK].wait_time = procs[nextOK].wait_time < 0 ? 0 : procs[nextOK].wait_time;
 				procs[nextOK].time_completed = clockerSpaniel - procs[nextOK].arrive_time;
 				procs[nextOK].processing_time = -1;
 				
+				missedDead += procs[nextOK].deadline < clockerSpaniel ? 1 : 0;
+				
 				processesLeft--;
-				//procs[nextOK].deadline = 32766;
 				procs[nextOK].completed = true;
 			}
 		}
-		//clockerSpaniel++;
 	}
 	
 	cout << endl;
@@ -135,16 +109,13 @@ int main()
 	output << "process\twait_time\ttime_completed" << endl;
 	for(int i = 0; i < PROCESSES; i++)
 	{
-		/*cout << left;
-		cout << "process[" << procs[i].id << "]: ";
-		cout << "wait_time = " << setw(8) << procs[i].wait_time;
-		cout << "time_completed = " << procs[i].time_completed << endl;*/
-
 		output << procs[i].id << "\t"
 			   << procs[i].wait_time << "\t"
 			   << procs[i].time_completed << endl;
 	}
 
+	output << "Missed deadlines : " << missedDead << endl;
+	
 	output.close();
 	delete(procs);
 	
