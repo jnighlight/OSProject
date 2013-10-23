@@ -15,7 +15,7 @@ $(ODIR)FCFSProcessor.o : $(SDIR)FCFS/FCFSProcessor.cpp $(IDIR)Process.h
 $(ODIR)process_generator.o : $(SDIR)process_generator.cpp $(IDIR)process_generator.h $(IDIR)Process.h
 	$(CC) -c -o $(ODIR)process_generator.o $(SDIR)process_generator.cpp $(CFLAGS)
 
-round_robin : $(ODIR)round_robin.o
+round_robin : $(ODIR)round_robin.o $(ODIR)process_generator.o
 	$(CC) -o $(BDIR)round_robin $(ODIR)round_robin.o $(CFLAGS) 
 	
 $(ODIR)round_robin.o : $(SDIR)Round\ Robin/main.cpp $(IDIR)Process.h 
