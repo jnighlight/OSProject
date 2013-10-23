@@ -23,3 +23,9 @@ edf : $(ODIR)EDF.o
 	
 $(ODIR)EDF.o : $(SDIR)EarliestDeadFirst/EDF.cpp ./include/Process.h 
 	$(CC) -c -o $(ODIR)EDF.o $(SDIR)EarliestDeadFirst/EDF.cpp $(CFLAGS)
+
+lottery : $(ODIR)lottery.o
+	$(CC) -o $(BDIR)lottery $(ODIR)lottery.o $(CFLAGS) 
+	
+$(ODIR)lottery.o : $(SDIR)Lottery/main.cpp ./include/Process.h 
+	$(CC) -c -o $(ODIR)lottery.o $(SDIR)Lottery/main.cpp $(CFLAGS)
