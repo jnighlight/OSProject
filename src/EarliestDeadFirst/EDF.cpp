@@ -2,10 +2,11 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <iomanip>
 #include <Process.h>
 #include <process_generator.h>
 
-#define PROCESSES 50
+#define PROCESSES 100
 
 using namespace std;
 
@@ -32,6 +33,9 @@ bool processSortByDeadline(Process procA, Process procB)
 
 int main()
 {
+	ofstream output;
+	output.open("EDF.txt");
+
 	/*int processingTimes[10] = { 2, 1, 3, 4, 5, 20, 7, 8, 9, 10};
 	int ids[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	//int processingTimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -126,6 +130,23 @@ int main()
 		cout << procs[i].wait_time  << endl;
 		cout << procs[i].time_completed  << endl;
 	}
+	
+	// Output results
+	output << "process\twait_time\ttime_completed" << endl;
+	for(int i = 0; i < PROCESSES; i++)
+	{
+		/*cout << left;
+		cout << "process[" << procs[i].id << "]: ";
+		cout << "wait_time = " << setw(8) << procs[i].wait_time;
+		cout << "time_completed = " << procs[i].time_completed << endl;*/
+
+		output << procs[i].id << "\t"
+			   << procs[i].wait_time << "\t"
+			   << procs[i].time_completed << endl;
+	}
+
+	output.close();
+	delete(procs);
 	
 	return 0;
 }
