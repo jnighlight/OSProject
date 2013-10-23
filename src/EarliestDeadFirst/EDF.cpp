@@ -20,24 +20,24 @@ bool processSortByID(Process procA, Process procB)
 
 bool processSortByDeadline(Process procA, Process procB)
 {
-	if(procA.arrive_time > clockerSpaniel)
+	if(procA.completed)
 		{return false;}
-	if(procB.arrive_time > clockerSpaniel)
+	if(procB.completed)
 		{return true;}
 	return procA.deadline <= procB.deadline;
 }
 
 int main()
 {
-	int runtimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
+	int processingTimes[10] = { 2, 1, 3, 4, 5, 20, 7, 8, 9, 10};
 	int ids[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	//int processingTimes[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
-	int arrivalTimes[10] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}; //{ 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
+	int arrivalTimes[10] = { 1, 1, 1, 1, 1, 70, 1, 1, 1, 1}; //{ 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
 	int deadlines[10] = { 2, 1, 3, 4, 5, 500, 7, 8, 9, 10};
 	int priorities[10] = { 2, 1, 3, 4, 5, 6, 7, 8, 9, 10};
 	int processesStart = 10;
 	int processesLeft = processesStart;
-	int processesToGo = 10;
+	//int processesToGo = 10;
 	
 	bool running = true;
 
@@ -46,8 +46,9 @@ int main()
 	for(int i = 0; i < 10; i++)
 	{
 		procs[i].id = ids[i];
-		procs[i].runtime = runtimes[i];
-		procs[i].period = 0;
+		procs[i].processing_time = processingTimes[i];
+		procs[i].runtime = 0;
+		procs[i].completed = false;
 		procs[i].arrive_time = arrivalTimes[i];
 		procs[i].deadline = deadlines[i];
 		procs[i].priority = priorities[i];
@@ -69,32 +70,43 @@ int main()
 		//sort it so the process with the earliest deadline is first in the "queue"
 		std::sort(procs, procs + processesStart, &processSortByDeadline);
 		cout << "Array sorted:" << endl;
-		for(int j = 0; j < 10; j++)
+		/*for(int j = 0; j < 10; j++)
 		{
 			cout << "process #" << procs[j].id << endl;
-		}
-		
-		
-		//If the processing time is less than the amount of time it needs...
-		if(procs[0].runtime - procs[0].period > 0)
+		}*/
+		int nextOK = -1;
+		for(int k = 0; k < 10; k++)
 		{
-			//...and if it has already arrived, increase how long it has been processing
-			if(procs[0].arrive_time <= clockerSpaniel)
-				{procs[0].period++;}
-			//If it hasn't arrived, then none are in the queue, and we're just spinning
+			if(!procs[k].completed && procs[k].arrive_time <= clockerSpaniel)
+			{
+				nextOK = k;
+				k = 10;
+			}
 		}
-		else
+		if(nextOK != -1)
 		{
-			cout << "finished process # " << procs[0].id << endl;
-			cout << "clock: " << clockerSpaniel << endl;
-			cout << "arrive_time: " << procs[0].arrive_time << endl;
-			cout << "runtime: " << procs[0].runtime << endl << endl;
-			procs[0].wait_time = (clockerSpaniel - procs[0].arrive_time) - procs[0].runtime;
-			procs[0].processing_time = clockerSpaniel - procs[0].arrive_time;
-			procs[0].runtime = -1;
-			
-			processesLeft--;
-			procs[0].deadline = 32766;
+			//If the processing time is less than the amount of time it needs...
+			if(procs[nextOK].processing_time - procs[nextOK].runtime > nextOK)
+			{
+				//...and if it has already arrived, increase how long it has been processing
+				if(procs[nextOK].arrive_time <= clockerSpaniel)
+					{procs[nextOK].runtime++;}
+				//If it hasn't arrived, then none are in the queue, and we're just spinning
+			}
+			else
+			{
+				cout << "finished process # " << procs[nextOK].id << endl;
+				cout << "clock: " << clockerSpaniel << endl;
+				cout << "arrive_time: " << procs[nextOK].arrive_time << endl;
+				cout << "processing_time: " << procs[nextOK].processing_time << endl << endl;
+				procs[nextOK].wait_time = (clockerSpaniel - procs[nextOK].arrive_time) - procs[nextOK].processing_time;
+				procs[nextOK].time_completed = clockerSpaniel - procs[nextOK].arrive_time;
+				procs[nextOK].processing_time = -1;
+				
+				processesLeft--;
+				//procs[nextOK].deadline = 32766;
+				procs[nextOK].completed = true;
+			}
 		}
 		//clockerSpaniel++;
 	}
@@ -107,7 +119,7 @@ int main()
 		
 		cout << endl << "Process Number: " << procs[i].id << endl;
 		cout << procs[i].wait_time  << endl;
-		cout << procs[i].processing_time  << endl;
+		cout << procs[i].time_completed  << endl;
 	}
 	
 	return 0;
