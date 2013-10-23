@@ -13,6 +13,7 @@ struct Process
 	int priority;
 
 	bool completed;
+	int time_completed;
 };
 
 #endif

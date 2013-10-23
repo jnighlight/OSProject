@@ -1,3 +1,6 @@
+// Round Robin Scheduling
+// Author: Jure Jumalon
+
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -12,17 +15,15 @@ int main(int argc, const char* argv[])
 {
 	// Initialize process values
 	int processes = 10;
-	int processing_times[10]      = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-	int arrival_times[10] = {100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
 
-	Process process[processes];
+	// Create the processes
+	ProcessGenerator::setMaxArrivalTime(1); // all processes arrive at the same time
+	Process* process = ProcessGenerator::generateProcesses(processes);
 	for(int i = 0; i < processes; i++)
 	{
-		process[i].id              = i;
-		process[i].processing_time = processing_times[i];
-		process[i].arrive_time     = arrival_times[i];
-		process[i].runtime         = 0;
-		process[i].completed       = false;
+		cout << "process[" << process[i].id << "]:";
+		cout << "	arrival_time = " << process[i].arrive_time;
+		cout << "	processing_time = " << process[i].processing_time << endl;
 	}
 
 	// Begin Round Robin
@@ -71,4 +72,6 @@ int main(int argc, const char* argv[])
 			processing_time = 0;
 		}
 	}
+
+	delete(process);
 }

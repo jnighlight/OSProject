@@ -13,10 +13,12 @@ Process* ProcessGenerator::generateProcesses(int num)
 	for(int i = 0; i < num; i++)
 	{
 		process[i].id              = i;
-		process[i].arrive_time     = rand() % max_arrival_time;
-		process[i].processing_time = rand() % max_processing_time;
+		process[i].arrive_time     = rand() % (max_arrival_time + 1);
+		process[i].processing_time = rand() % max_processing_time + 1;
 		process[i].runtime         = 0;
+		process[i].wait_time       = 0;
 		process[i].completed       = false;
+		process[i].time_completed  = -1;
 	}
 
 	return process;
@@ -24,10 +26,10 @@ Process* ProcessGenerator::generateProcesses(int num)
 
 void ProcessGenerator::setMaxArrivalTime(int num)
 {
-	ProcessGenerator::max_arrival_time = num;
+	max_arrival_time = num;
 };
 
 void ProcessGenerator::setMaxProcessingTime(int num)
 {
-	ProcessGenerator::max_processing_time = num;
+	max_processing_time = num;
 };
